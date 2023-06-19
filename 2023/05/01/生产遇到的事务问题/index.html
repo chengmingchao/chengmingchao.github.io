@@ -16,15 +16,15 @@
   <meta name="author" content="chengmingchao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="退款流程说明业务方发起退款请求，参数需要携带原支付id，退款流水号，退款金额，然后向支付平台发起退款请求，需要注意的是，退款金额不能大于原支付金额，支持部分退款。退款接口为同步接口，接口即可返回退款结果，如果返回的是中间状态，此时会创建异步任务主动查询退款结果同步到业务系统的退款状态。">
+    <meta name="description" content="记录在大促时生产环境遇到关于事务问题1、背景中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock wait timeout exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。2、分析首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="退款服务实践">
-<meta property="og:url" content="https://chengmingchao.github.io/2023/04/21/%E9%80%80%E6%AC%BE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E8%B7%B5%E4%B8%8A%E7%AF%87-%E9%80%80%E6%AC%BE%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:title" content="生产遇到的事务问题">
+<meta property="og:url" content="https://chengmingchao.github.io/2023/05/01/%E7%94%9F%E4%BA%A7%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="此人略萌">
-<meta property="og:description" content="退款流程说明业务方发起退款请求，参数需要携带原支付id，退款流水号，退款金额，然后向支付平台发起退款请求，需要注意的是，退款金额不能大于原支付金额，支持部分退款。退款接口为同步接口，接口即可返回退款结果，如果返回的是中间状态，此时会创建异步任务主动查询退款结果同步到业务系统的退款状态。">
+<meta property="og:description" content="记录在大促时生产环境遇到关于事务问题1、背景中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock wait timeout exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。2、分析首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-04-21T14:10:00.000Z">
-<meta property="article:modified_time" content="2023-06-19T15:31:38.409Z">
+<meta property="article:published_time" content="2023-05-01T13:20:00.000Z">
+<meta property="article:modified_time" content="2023-06-19T16:09:49.559Z">
 <meta property="article:author" content="chengmingchao">
 <meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>退款服务实践 - 此人略萌</title>
+  <title>生产遇到的事务问题 - 此人略萌</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="退款服务实践"></span>
+            <span id="subtitle" data-typed-text="生产遇到的事务问题"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-21 22:10" pubdate>
-          2023年4月21日 晚上
+        <time datetime="2023-05-01 21:20" pubdate>
+          2023年5月1日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          143 字
+          766 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          2 分钟
+          7 分钟
         
       </span>
     
@@ -271,13 +271,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">退款服务实践</h1>
+            <h1 style="display: none">生产遇到的事务问题</h1>
             
             
               <div class="markdown-body">
                 
-                <h4 id="退款流程说明"><a href="#退款流程说明" class="headerlink" title="退款流程说明"></a>退款流程说明</h4><p>业务方发起退款请求，参数需要携带原支付id，退款流水号，退款金额，然后向支付平台发起退款请求，需要注意的是，退款金额不能大于原支付金额，支持部分退款。退款接口为同步接口，接口即可返回退款结果，如果返回的是中间状态，此时会创建异步任务主动查询退款结果同步到业务系统的退款状态。</p>
-
+                <h3 id="记录在大促时生产环境遇到关于事务问题"><a href="#记录在大促时生产环境遇到关于事务问题" class="headerlink" title="记录在大促时生产环境遇到关于事务问题"></a>记录在大促时生产环境遇到关于事务问题</h3><h3 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h3><h4 id="中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock-wait-timeout-exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。"><a href="#中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock-wait-timeout-exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。" class="headerlink" title="中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock wait timeout exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。"></a>中午吃完饭，突然企业微信收到很多程序异常告警，CannotAcquireLockException……Lock wait timeout exceeded……此时的我不淡定了，正值大促期间，要是出现问题那就是大问题！赶紧分析问题，定位问题发生在哪儿，即使止损。</h4><h3 id="2、分析"><a href="#2、分析" class="headerlink" title="2、分析"></a>2、分析</h3><h4 id="首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据id更新这张表的sql在执行，但是想一想，根据id更新应该很快才对；通过这个更新sql找到对应的业务代码和数据情况，发现很多数据不该下发到下游的全部下发了，这个是奇怪的点，这些数据应该都是被hold在系统中才对，立马询问了对应的运营，根据运营的描述，他是点了全量下发，然后觉得点错了，立马又点了批量下发，但是操作日志上并没有看到全量下发的操作记录，但是种种迹象表明，程序肯定是执行了全部下发的指令；在接口日志里面有看到有大量重复的单号记录下来，而这个记录是发到消息队列的记录，然后又立马查看了线上mq监控，发现消息堆积一直在增长，达到了50多万，还是持续增长，排查到代码往mq发送消息方法外面有while（true），第一感觉可能是死循环了，但是也有break的判断条件，查看服务器监控，果然cpu已经达到80-了，那肯定是死循环了，但还是比较疑惑，但是管不了这么多，首先立马让运维重启了web服务，后来发现群里不再报异常，mq堆积在减少，说明没有新的消息产生，消费者在消费了，慢慢回归正常了，到这里分析下来大致定位到发生问题的服务，并重启，解决了问题。"><a href="#首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据id更新这张表的sql在执行，但是想一想，根据id更新应该很快才对；通过这个更新sql找到对应的业务代码和数据情况，发现很多数据不该下发到下游的全部下发了，这个是奇怪的点，这些数据应该都是被hold在系统中才对，立马询问了对应的运营，根据运营的描述，他是点了全量下发，然后觉得点错了，立马又点了批量下发，但是操作日志上并没有看到全量下发的操作记录，但是种种迹象表明，程序肯定是执行了全部下发的指令；在接口日志里面有看到有大量重复的单号记录下来，而这个记录是发到消息队列的记录，然后又立马查看了线上mq监控，发现消息堆积一直在增长，达到了50多万，还是持续增长，排查到代码往mq发送消息方法外面有while（true），第一感觉可能是死循环了，但是也有break的判断条件，查看服务器监控，果然cpu已经达到80-了，那肯定是死循环了，但还是比较疑惑，但是管不了这么多，首先立马让运维重启了web服务，后来发现群里不再报异常，mq堆积在减少，说明没有新的消息产生，消费者在消费了，慢慢回归正常了，到这里分析下来大致定位到发生问题的服务，并重启，解决了问题。" class="headerlink" title="首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据id更新这张表的sql在执行，但是想一想，根据id更新应该很快才对；通过这个更新sql找到对应的业务代码和数据情况，发现很多数据不该下发到下游的全部下发了，这个是奇怪的点，这些数据应该都是被hold在系统中才对，立马询问了对应的运营，根据运营的描述，他是点了全量下发，然后觉得点错了，立马又点了批量下发，但是操作日志上并没有看到全量下发的操作记录，但是种种迹象表明，程序肯定是执行了全部下发的指令；在接口日志里面有看到有大量重复的单号记录下来，而这个记录是发到消息队列的记录，然后又立马查看了线上mq监控，发现消息堆积一直在增长，达到了50多万，还是持续增长，排查到代码往mq发送消息方法外面有while（true），第一感觉可能是死循环了，但是也有break的判断条件，查看服务器监控，果然cpu已经达到80%了，那肯定是死循环了，但还是比较疑惑，但是管不了这么多，首先立马让运维重启了web服务，后来发现群里不再报异常，mq堆积在减少，说明没有新的消息产生，消费者在消费了，慢慢回归正常了，到这里分析下来大致定位到发生问题的服务，并重启，解决了问题。"></a>首先看到sql是更新一张表，获取锁超时，立马找运维查看目前所有的事务进程，看到很多的根据id更新这张表的sql在执行，但是想一想，根据id更新应该很快才对；通过这个更新sql找到对应的业务代码和数据情况，发现很多数据不该下发到下游的全部下发了，这个是奇怪的点，这些数据应该都是被hold在系统中才对，立马询问了对应的运营，根据运营的描述，他是点了全量下发，然后觉得点错了，立马又点了批量下发，但是操作日志上并没有看到全量下发的操作记录，但是种种迹象表明，程序肯定是执行了全部下发的指令；在接口日志里面有看到有大量重复的单号记录下来，而这个记录是发到消息队列的记录，然后又立马查看了线上mq监控，发现消息堆积一直在增长，达到了50多万，还是持续增长，排查到代码往mq发送消息方法外面有while（true），第一感觉可能是死循环了，但是也有break的判断条件，查看服务器监控，果然cpu已经达到80%了，那肯定是死循环了，但还是比较疑惑，但是管不了这么多，首先立马让运维重启了web服务，后来发现群里不再报异常，mq堆积在减少，说明没有新的消息产生，消费者在消费了，慢慢回归正常了，到这里分析下来大致定位到发生问题的服务，并重启，解决了问题。</h4><h4 id="遗留问题点：①、为何会获取锁超时；②、为什么会死循环；③、为何点了全量下发，但是系统没有操作记录？"><a href="#遗留问题点：①、为何会获取锁超时；②、为什么会死循环；③、为何点了全量下发，但是系统没有操作记录？" class="headerlink" title="遗留问题点：①、为何会获取锁超时；②、为什么会死循环；③、为何点了全量下发，但是系统没有操作记录？"></a>遗留问题点：①、为何会获取锁超时；②、为什么会死循环；③、为何点了全量下发，但是系统没有操作记录？</h4><h3 id="3、定位具体问题"><a href="#3、定位具体问题" class="headerlink" title="3、定位具体问题"></a>3、定位具体问题</h3><h3 id="4、问题数据修复"><a href="#4、问题数据修复" class="headerlink" title="4、问题数据修复"></a>4、问题数据修复</h3><h3 id="5、数据修复过程中发现另外需要继续修复的bug"><a href="#5、数据修复过程中发现另外需要继续修复的bug" class="headerlink" title="5、数据修复过程中发现另外需要继续修复的bug"></a>5、数据修复过程中发现另外需要继续修复的bug</h3><h3 id="6、总结"><a href="#6、总结" class="headerlink" title="6、总结"></a>6、总结</h3>
                 
               </div>
             
@@ -295,7 +294,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/" class="category-chain-item">项目实战</a>
+  <a href="/categories/Java/" class="category-chain-item">Java</a>
   
   
 
@@ -322,8 +321,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>退款服务实践</div>
-      <div>https://chengmingchao.github.io/2023/04/21/退款服务实践上篇-退款流程说明/</div>
+      <div>生产遇到的事务问题</div>
+      <div>https://chengmingchao.github.io/2023/05/01/生产遇到的事务问题/</div>
     </div>
     <div class="license-meta">
       
@@ -335,7 +334,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年4月21日</div>
+          <div>2023年5月1日</div>
         </div>
       
       
@@ -367,18 +366,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/05/01/%E7%94%9F%E4%BA%A7%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98/" title="生产遇到的事务问题">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">生产遇到的事务问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/20/%E6%94%AF%E4%BB%98%E6%9C%8D%E5%8A%A1%E5%AE%9E%E8%B7%B5%E4%B8%8B%E7%AF%87-%E5%BC%80%E5%8F%91%E8%AE%BE%E8%AE%A1/" title="支付服务实践下篇-支付开发设计">
-                        <span class="hidden-mobile">支付服务实践下篇-支付开发设计</span>
+                      <a href="/2023/04/21/%E9%80%80%E6%AC%BE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E8%B7%B5%E4%B8%8A%E7%AF%87-%E9%80%80%E6%AC%BE%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E/" title="退款服务实践">
+                        <span class="hidden-mobile">退款服务实践</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
